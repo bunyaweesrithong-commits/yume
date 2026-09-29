@@ -1,0 +1,210 @@
+/* =========================
+   About My Yume
+========================= */
+
+.yume-page {
+  width: 100%;
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 70px 24px 90px;
+  box-sizing: border-box;
+  color: #2b2340;
+}
+
+.yume-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.yume-label {
+  margin: 0 0 10px;
+  font-size: 12px;
+  letter-spacing: 3px;
+  font-weight: 600;
+  color: #7c6ac8;
+}
+
+.yume-header h1 {
+  margin: 0;
+  font-size: 48px;
+  color: #30254d;
+}
+
+.yume-header-intro {
+  margin: 14px 0 0;
+  color: #625978;
+}
+
+/* =========================
+   Pair Section
+========================= */
+
+.yume-pair {
+  --pair-gradient: linear-gradient(135deg, #806bd0, #a85eb0, #d16a87);
+  --pair-color: #8755a8;
+
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 40px;
+  align-items: start;
+
+  padding: 36px;
+  margin-bottom: 50px;
+
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 4px 18px rgba(60, 40, 100, 0.1);
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* แถบสีด้านบนของแต่ละคู่ */
+.yume-pair::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: var(--pair-gradient);
+}
+
+/* สีประจำคู่ */
+.yume-pair--tomura {
+  --pair-gradient: linear-gradient(135deg, #806bd0, #a85eb0, #d16a87);
+  --pair-color: #8755a8;
+}
+
+.yume-pair--dabi {
+  --pair-gradient: linear-gradient(120deg, #35c9c3, #458fc7, #6254b8, #51418f);
+  --pair-color: #458fc7;
+}
+
+.yume-pair--trio {
+  --pair-gradient: linear-gradient(120deg, #35c9c3, #6254b8, #a85eb0, #d16a87);
+  --pair-color: #6254b8;
+}
+
+/* สลับรูปไปขวา */
+.yume-pair--reverse {
+  grid-template-columns: 1fr 380px;
+}
+
+.yume-pair--reverse .yume-pair-image {
+  order: 2;
+}
+
+/* รูปค้างอยู่ตอนเลื่อนอ่าน */
+.yume-pair-image {
+  position: sticky;
+  top: 100px;
+}
+
+.yume-pair-image img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(60, 40, 100, 0.15);
+}
+
+.yume-pair-number {
+  margin: 0 0 6px;
+  font-size: 12px;
+  letter-spacing: 3px;
+  font-weight: 700;
+  color: var(--pair-color);
+}
+
+.yume-pair-content h2 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.25;
+  background: var(--pair-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.yume-pair-fandom {
+  display: inline-block;
+  margin: 12px 0 24px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: #eeeafd;
+  color: #5b43a3;
+}
+
+.yume-pair-text h3 {
+  margin: 26px 0 8px;
+  font-size: 18px;
+  color: #30254d;
+  padding-left: 12px;
+  border-left: 4px solid var(--pair-color);
+}
+
+.yume-pair-text h3:first-child {
+  margin-top: 0;
+}
+
+.yume-pair-text p {
+  margin: 0 0 14px;
+  line-height: 1.9;
+  color: #4d4466;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 850px) {
+
+  .yume-pair,
+  .yume-pair--reverse {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding: 26px 20px;
+  }
+
+  .yume-pair--reverse .yume-pair-image {
+    order: 0;
+  }
+
+  .yume-pair-image {
+    position: static;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .yume-header h1 {
+    font-size: 36px;
+  }
+
+  .yume-pair-content h2 {
+    font-size: 26px;
+  }
+}
+
+/* =========================
+   Artist Credit
+========================= */
+
+.yume-pair-credit {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #7b708f;
+  line-height: 1.5;
+}
+
+.yume-pair-credit a {
+  color: var(--pair-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.yume-pair-credit a:hover {
+  text-decoration: underline;
+}
