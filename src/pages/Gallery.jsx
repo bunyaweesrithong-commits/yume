@@ -2,68 +2,87 @@ import { useState, useEffect } from "react";
 import galleryItems from "../data/galleryData.js";
 import "../styles/Gallery.css";
 
- 
+// หมวดที่ต้องเตือนก่อนเข้า
+const warningZones = {
+  adult: {
+    icon: "🔞",
+    title: "Adult Zone",
+    text: "This section may contain mature content.",
+  },
+  sims4: {
+    icon: "🔞",
+    title: "The Sims 4",
+    text: "This section may contain mature content.",
+  },
+};
+
+// ปุ่ม filter ปกติ
+const filters = [
+  { id: "all", label: "All" },
+  { id: "shiyo-tomura", label: "Shiyo × Tomura", className: "shiyo-tomura-filter" },
+  { id: "shiyo-dabi", label: "Shiyo × Dabi", className: "shiyo-dabi-filter" },
+  { id: "shiyo-tomu-dabi", label: "Shiyo × Tomura × Dabi" },
+  { id: "shiyo", label: "Shiyo" },
+  { id: "templates", label: "Templates" },
+  { id: "others", label: "Others" },
+];
+
 function Gallery() {
 
-const [adultConfirmed, setAdultConfirmed] = useState(false);
-const [activeFilter, setActiveFilter] = useState("all");
-const [selectedImage, setSelectedImage] = useState(null);
-const [showAdultWarning, setShowAdultWarning] = useState(false);
+  const [confirmedZones, setConfirmedZones] = useState([]);
+  const [pendingZone, setPendingZone] = useState(null);
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [selectedImage, setSelectedImage] = useState(null);
+
   // กรองรูปตาม Category
   const filteredItems =
-  activeFilter === "all"
-    ? galleryItems.filter((item) => item.category !== "adult")
-    : galleryItems.filter(
-        (item) => item.category === activeFilter
-      );
+    activeFilter === "all"
+      ? galleryItems.filter((item) => !warningZones[item.category])
+      : galleryItems.filter((item) => item.category === activeFilter);
+
+  const isLocked = (category) =>
+    Boolean(warningZones[category]) && !confirmedZones.includes(category);
+
+  // กดปุ่มหมวดที่มีคำเตือน
+  const openZone = (zone) => {
+    if (confirmedZones.includes(zone)) {
+      setActiveFilter(zone);
+    } else {
+      setPendingZone(zone);
+    }
+  };
+
+  const showPrevious = () => {
+    const currentIndex = filteredItems.findIndex(
+      (item) => item.image === selectedImage.image
+    );
+    const previousIndex =
+      currentIndex === 0 ? filteredItems.length - 1 : currentIndex - 1;
+    setSelectedImage(filteredItems[previousIndex]);
+  };
+
+  const showNext = () => {
+    const currentIndex = filteredItems.findIndex(
+      (item) => item.image === selectedImage.image
+    );
+    const nextIndex =
+      currentIndex === filteredItems.length - 1 ? 0 : currentIndex + 1;
+    setSelectedImage(filteredItems[nextIndex]);
+  };
 
   // Keyboard controls
   useEffect(() => {
-
     if (!selectedImage) return;
 
     const handleKeyDown = (event) => {
-
-      const currentIndex = filteredItems.findIndex(
-        (item) => item.image === selectedImage.image
-      );
-
-      // ← Previous
-      if (event.key === "ArrowLeft") {
-
-        const previousIndex =
-          currentIndex === 0
-            ? filteredItems.length - 1
-            : currentIndex - 1;
-
-        setSelectedImage(filteredItems[previousIndex]);
-      }
-
-      // → Next
-      if (event.key === "ArrowRight") {
-
-        const nextIndex =
-          currentIndex === filteredItems.length - 1
-            ? 0
-            : currentIndex + 1;
-
-        setSelectedImage(filteredItems[nextIndex]);
-      }
-
-      // ESC
-      if (event.key === "Escape") {
-        setSelectedImage(null);
-      }
-
+      if (event.key === "ArrowLeft") showPrevious();
+      if (event.key === "ArrowRight") showNext();
+      if (event.key === "Escape") setSelectedImage(null);
     };
 
     window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-
-  }, [selectedImage, filteredItems]);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  });
 
   return (
     <main className="gallery-page">
@@ -74,13 +93,11 @@ const [showAdultWarning, setShowAdultWarning] = useState(false);
 
       <header className="gallery-header">
 
-        <p className="gallery-label">
-          ARTWORK & ILLUSTRATION
-        </p>
+        <p className="gallery-label">ARTWORK & ILLUSTRATION</p>
 
         <h1>Gallery</h1>
 
-                <p className="gallery-intro">
+        <p className="gallery-intro">
           A collection of artwork, illustrations,
           and moments from Commission.
         </p>
@@ -107,192 +124,118 @@ const [showAdultWarning, setShowAdultWarning] = useState(false);
 
       <div className="gallery-filter">
 
-        <button
-          className={activeFilter === "all" ? "active" : ""}
-          onClick={() => setActiveFilter("all")}
-        >
-          All
-        </button>
+        {filters.map((filter) => (
+          <button
+            key={filter.id}
+            className={`${filter.className ?? ""} ${
+              activeFilter === filter.id ? "active" : ""
+            }`}
+            onClick={() => setActiveFilter(filter.id)}
+          >
+            {filter.label}
+          </button>
+        ))}
 
-        <button
-  className={`shiyo-tomura-filter ${
-    activeFilter === "shiyo-tomura" 
-    ? "active" 
-    : ""
-                                              }`}
-  onClick={() => setActiveFilter("shiyo-tomura")}
-    >
-      Shiyo × Tomura
-      </button>
-
-        <button
-            className={`shiyo-dabi-filter ${
-            activeFilter === "shiyo-dabi" 
-            ? "active" 
-            : ""
-                                            }`}
-            onClick={() => setActiveFilter("shiyo-dabi")}
-              >
-                    Shiyo × Dabi
-              </button>
-
-        <button
-          className={
-            activeFilter === "shiyo-tomu-dabi"
-              ? "active"
-              : ""
-          }
-          onClick={() => setActiveFilter("shiyo-tomu-dabi")}
-        >
-          Shiyo × Tomura × Dabi
-        </button>
-
-         <button
-          className={
-            activeFilter === "shiyo"
-              ? "active"
-              : ""
-          }
-          onClick={() => setActiveFilter("shiyo")}
-        >
-          Shiyo
-        </button>
-
-        <button
-          className={
-            activeFilter === "templates"
-              ? "active"
-              : ""
-          }
-          onClick={() => setActiveFilter("templates")}
-        >
-          Templates
-        </button>
-
-        <button
-          className={
-            activeFilter === "others"
-              ? "active"
-              : ""
-          }
-          onClick={() => setActiveFilter("others")}
-        >
-          Others
-        </button>
-
-       <button
-  className={`adult-zone-filter ${
-    activeFilter === "adult" ? "active" : ""
-  }`}
-  onClick={() => {
-    setShowAdultWarning(true);
-  }}
->
-  🔞 Adult Zone
-</button>
+        {Object.entries(warningZones).map(([zone, info]) => (
+          <button
+            key={zone}
+            className={`adult-zone-filter ${
+              activeFilter === zone ? "active" : ""
+            }`}
+            onClick={() => openZone(zone)}
+          >
+            {info.icon} {info.title}
+          </button>
+        ))}
 
       </div>
 
-{/* =========================
-    Gallery Grid
-========================= */}
 
-<div className="gallery-grid">
+      {/* =========================
+          Gallery Grid
+      ========================= */}
 
-  {filteredItems.map((item) => (
+      <div className="gallery-grid">
 
-    <div
-      className={`gallery-card ${
-        item.category === "adult" && !adultConfirmed
-          ? "adult-blurred"
-          : ""
-      }`}
-      key={item.image}
-      onClick={() => {
-        if (item.category === "adult" && !adultConfirmed) {
-          return;
-        }
+        {filteredItems.map((item) => (
+          <div
+            className={`gallery-card ${
+              isLocked(item.category) ? "adult-blurred" : ""
+            }`}
+            key={item.image}
+            onClick={() => {
+              if (isLocked(item.category)) return;
+              setSelectedImage(item);
+            }}
+          >
+            <img src={item.image} alt="Artwork" loading="lazy" />
+          </div>
+        ))}
 
-        setSelectedImage(item);
-      }}
-    >
+      </div>
 
-      <img
-        src={item.image}
-        alt="Artwork"
-        loading="lazy"
-      />
 
-    </div>
+      {/* =========================
+          Warning Modal
+      ========================= */}
 
-  ))}
+      {pendingZone && (
+        <div
+          className="adult-warning-overlay"
+          onClick={() => setPendingZone(null)}
+        >
+          <div
+            className="adult-warning-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
 
-</div>
-        {/* =========================
+            <div className="adult-warning-icon">
+              {warningZones[pendingZone].icon}
+            </div>
+
+            <h2>{warningZones[pendingZone].title}</h2>
+
+            <p>{warningZones[pendingZone].text}</p>
+
+            <p className="adult-warning-small">
+              Please confirm that you want to enter this section.
+            </p>
+
+            <div className="adult-warning-buttons">
+
+              <button
+                className="adult-cancel"
+                onClick={() => {
+                  setPendingZone(null);
+                  setActiveFilter("all");
+                }}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="adult-confirm"
+                onClick={() => {
+                  setConfirmedZones((zones) => [...zones, pendingZone]);
+                  setActiveFilter(pendingZone);
+                  setPendingZone(null);
+                }}
+              >
+                I Understand
+              </button>
+
+            </div>
+
+          </div>
+        </div>
+      )}
+
+
+      {/* =========================
           Lightbox
       ========================= */}
 
-      {/* =========================
-    Adult Warning
-========================= */}
-
-{showAdultWarning && (
-  <div
-    className="adult-warning-overlay"
-    onClick={() => setShowAdultWarning(false)}
-  >
-
-    <div
-      className="adult-warning-modal"
-      onClick={(e) => e.stopPropagation()}
-    >
-
-      <div className="adult-warning-icon">
-        🔞
-      </div>
-
-      <h2>Adult Zone</h2>
-
-      <p>
-        This section may contain mature content.
-      </p>
-
-      <p className="adult-warning-small">
-        Please confirm that you want to enter this section.
-      </p>
-
-      <div className="adult-warning-buttons">
-
-        <button
-          className="adult-cancel"
-          onClick={() => {
-            setShowAdultWarning(false);
-            setActiveFilter("all");
-          }}
-        >
-          Cancel
-        </button>
-
-        <button
-          className="adult-confirm"
-          onClick={() => {
-            setAdultConfirmed(true);
-            setActiveFilter("adult");
-            setShowAdultWarning(false);
-          }}
-        >
-          I Understand
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-)}
-
       {selectedImage && (
-
         <div
           className="lightbox"
           onClick={() => setSelectedImage(null)}
@@ -306,63 +249,39 @@ const [showAdultWarning, setShowAdultWarning] = useState(false);
           </button>
 
           <button
-  className="lightbox-prev"
-  onClick={() => {
-    const currentIndex = filteredItems.findIndex(
-      (item) => item.image === selectedImage.image
-    );
-
-    const previousIndex =
-      currentIndex === 0
-        ? filteredItems.length - 1
-        : currentIndex - 1;
-
-    setSelectedImage(filteredItems[previousIndex]);
-  }}
->
-  ‹
-</button>
-
+            className="lightbox-prev"
+            onClick={(e) => {
+              e.stopPropagation();
+              showPrevious();
+            }}
+          >
+            ‹
+          </button>
 
           <div
             className="lightbox-content"
             onClick={(e) => e.stopPropagation()}
           >
-
-            <img
-              src={selectedImage.image}
-              alt="Artwork"
-            />
-
+            <img src={selectedImage.image} alt="Artwork" />
           </div>
+
           <div className="lightbox-counter">
-                {filteredItems.findIndex(
-               (item) => item.image === selectedImage.image
-                ) + 1}
-                {" / "}
+            {filteredItems.findIndex(
+              (item) => item.image === selectedImage.image
+            ) + 1}
+            {" / "}
             {filteredItems.length}
           </div>
 
           <button
             className="lightbox-next"
-            onClick={() => {
-              const currentIndex = filteredItems.findIndex(
-                (item) => item.image === selectedImage.image
-                );
-
-    const nextIndex =
-      currentIndex === filteredItems.length - 1
-        ? 0
-        : currentIndex + 1;
-
-    setSelectedImage(filteredItems[nextIndex]);
-  }}
->
-  ›
-</button>
-
-
-
+            onClick={(e) => {
+              e.stopPropagation();
+              showNext();
+            }}
+          >
+            ›
+          </button>
 
         </div>
       )}
