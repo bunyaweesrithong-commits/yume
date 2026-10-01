@@ -303,30 +303,49 @@
   }
 }
 
-/* ต่อท้าย src/style.css */
+/* =========================
+   Story: รูปช่วงเปลี่ยนชุด
+   (ใช้ชื่อ oc-story-gallery เพื่อไม่ให้ชนกับ .oc-timeline ด้านบน)
+========================= */
 
-.oc-timeline {
+/* ยกรูปขึ้นมาอยู่เหนือพื้นขาวของ .oc-story::after */
+.oc-story-gallery,
+.oc-story-extra {
+  position: relative;
+  z-index: 1;
+}
+
+.oc-story-gallery {
   display: flex;
   flex-direction: column;
   gap: 24px;           /* ระยะห่างระหว่างรูป */
-  margin: 24px 0 0;
+  padding: 0 40px 40px;
 }
 
-.oc-timeline img {
+.oc-story-gallery img {
   display: block;
   width: 100%;         /* ย่อตามความกว้างจอ */
   height: auto;        /* คงสัดส่วน 16:9 */
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 20px rgba(60, 40, 100, 0.15);
+}
+
+.oc-story-extra {
+  margin: 0 40px 40px;
 }
 
 /* มือถือ: ลดระยะห่าง + มุมโค้งน้อยลงนิด */
-@media (max-width: 700px) {
-  .oc-timeline {
+@media (max-width: 850px) {
+  .oc-story-gallery {
     gap: 16px;
+    padding: 0 22px 30px;
   }
 
-  .oc-timeline img {
+  .oc-story-gallery img {
     border-radius: 8px;
+  }
+
+  .oc-story-extra {
+    margin: 0 22px 30px;
   }
 }
