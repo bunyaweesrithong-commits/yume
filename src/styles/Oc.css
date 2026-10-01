@@ -263,3 +263,42 @@
     padding: 0 22px 30px;
   }
 }
+
+/* ต่อท้าย src/style.css */
+
+.oc-story-extra {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 24px;
+  align-items: center;
+  margin: 40px 0 0;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.oc-story-extra img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  object-fit: cover;
+}
+
+.oc-story-extra__title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+}
+
+.oc-story-extra figcaption p {
+  line-height: 1.8;
+}
+
+/* มือถือ: รูปอยู่บน ข้อความอยู่ล่าง */
+@media (max-width: 700px) {
+  .oc-story-extra {
+    grid-template-columns: 1fr;
+  }
+}
