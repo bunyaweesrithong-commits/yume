@@ -302,3 +302,31 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ต่อท้าย src/style.css */
+
+.oc-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;           /* ระยะห่างระหว่างรูป */
+  margin: 24px 0 0;
+}
+
+.oc-timeline img {
+  display: block;
+  width: 100%;         /* ย่อตามความกว้างจอ */
+  height: auto;        /* คงสัดส่วน 16:9 */
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* มือถือ: ลดระยะห่าง + มุมโค้งน้อยลงนิด */
+@media (max-width: 700px) {
+  .oc-timeline {
+    gap: 16px;
+  }
+
+  .oc-timeline img {
+    border-radius: 8px;
+  }
+}
