@@ -812,3 +812,14 @@ html {
 
   font-size: 0.9rem;
 }
+
+
+/* Image in the Mainly Active Yume Pairs card */
+.yume-pair-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 1.2rem;
+  border-radius: 18px;
+  border: 1px solid rgba(167,139,250,0.25);
+}

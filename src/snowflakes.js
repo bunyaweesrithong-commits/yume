@@ -1,3 +1,4 @@
+import "./effects.js";
 // Falling snowflakes on every page.
 // Put this file at src/snowflakes.js and add to each page before </body>:
 //   <script type="module" src="/src/snowflakes.js"></script>
@@ -17,7 +18,7 @@ style.textContent = `
   @keyframes snow-fall { to { top: 105vh; } }
   @keyframes snow-sway { from { transform: translateX(-15px) rotate(0deg); }
                          to   { transform: translateX(15px) rotate(180deg); } }
-  @media (prefers-reduced-motion: reduce) { .snow-layer { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .snow-layer span { animation: none; top: var(--still-top); } }
 `;
 document.head.appendChild(style);
 
@@ -29,6 +30,7 @@ for (let i = 0; i < COUNT; i++) {
   const f = document.createElement("span");
   f.textContent = FLAKES[Math.floor(Math.random() * FLAKES.length)];
   f.style.left = Math.random() * 100 + "%";
+  f.style.setProperty("--still-top", Math.random() * 100 + "vh"); // used when motion is turned off
   f.style.fontSize = 8 + Math.random() * 14 + "px";
   f.style.opacity = 0.4 + Math.random() * 0.5;
   f.style.setProperty("--dur", 8 + Math.random() * 10 + "s");
