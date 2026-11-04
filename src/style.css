@@ -780,3 +780,35 @@ html {
   scroll-behavior: smooth;
 }
 
+
+
+/* FAVORITE CHARACTERS */
+
+.favorite-chars__figure {
+  margin: 1.2rem auto 0;
+
+  max-width: 520px;
+
+  text-align: center;
+}
+
+.favorite-chars__figure img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(167,139,250,0.25);
+
+  box-shadow: 0 10px 30px rgba(167,139,250,0.15);
+}
+
+.favorite-chars__figure figcaption {
+  margin-top: 0.9rem;
+
+  color: #c4b5fd;
+
+  font-size: 0.9rem;
+}
