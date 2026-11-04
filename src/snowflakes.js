@@ -1,4 +1,5 @@
 import "./effects.js";
+import "./music.js";
 // Falling snowflakes on every page.
 // Put this file at src/snowflakes.js and add to each page before </body>:
 //   <script type="module" src="/src/snowflakes.js"></script>
