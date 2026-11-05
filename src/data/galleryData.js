@@ -4,8 +4,24 @@ const files = import.meta.glob(
   { eager: true, import: "default" }
 );
 
+// ลำดับหมวดตอนกด All (หมวดไหนอยู่บนสุด) ถ้าอยากสลับ ให้สลับในลิสต์นี้
+const CATEGORY_ORDER = [
+  "shiyo-tomu-dabi",
+  "shiyo-tomura",
+  "shiyo-dabi",
+  "shiyo",
+  "templates",
+  "others",
+];
+const rank = (path) => {
+  const category = path.split("/").slice(-2, -1)[0];
+  const i = CATEGORY_ORDER.indexOf(category);
+  return i === -1 ? CATEGORY_ORDER.length : i;
+};
+
 const galleryItems = Object.entries(files)
   .sort(([a], [b]) =>
+    rank(a) - rank(b) ||
     a.localeCompare(b, undefined, { numeric: true })
   )
   .map(([path, url]) => {
